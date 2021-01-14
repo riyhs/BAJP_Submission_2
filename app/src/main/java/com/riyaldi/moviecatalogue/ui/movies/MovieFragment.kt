@@ -5,6 +5,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,12 +27,14 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
 
+            showProgressBar(true)
+
             val factory = ViewModelFactory.getInstance(requireActivity())
             val viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             val movieAdapter = MovieAdapter()
 
             viewModel.getMovies().observe(viewLifecycleOwner, { movies ->
-                // progressbar
+                showProgressBar(false)
                 movieAdapter.setMovies(movies)
                 movieAdapter.notifyDataSetChanged()
             })
@@ -44,6 +48,11 @@ class MovieFragment : Fragment() {
                 this.adapter = movieAdapter
             }
         }
+    }
+
+    private fun showProgressBar(state: Boolean) {
+        fragmentMovieBinding.pbMovies.isVisible = state
+        fragmentMovieBinding.rvMovies.isInvisible = state
     }
 
 }

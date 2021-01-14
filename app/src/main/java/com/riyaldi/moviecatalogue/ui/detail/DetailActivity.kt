@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
@@ -37,6 +39,8 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
         supportActionBar?.hide()
 
+        showProgressBar(true)
+
         detailBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
         detailBinding.appbar.addOnOffsetChangedListener(this)
 
@@ -51,11 +55,18 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory)
                 viewModel.getMovieDetail().observe(this, { detail ->
+                    showProgressBar(false)
                     populateDataDetail(detail)
                 })
             }
         }
 
+    }
+
+    private fun showProgressBar(state: Boolean) {
+        detailBinding.progressBar.isVisible = state
+        detailBinding.appbar.isInvisible = state
+        detailBinding.nestedScrollView.isInvisible = state
     }
 
     private fun populateDataDetail(data: DetailEntity) {
