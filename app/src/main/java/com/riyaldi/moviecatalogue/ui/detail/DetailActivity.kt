@@ -11,7 +11,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
+import com.riyaldi.moviecatalogue.data.DetailEntity
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
@@ -50,7 +50,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory)
-                viewModel.getMovieDetail().observe(this, {detail ->
+                viewModel.getMovieDetail().observe(this, { detail ->
                     populateDataDetail(detail)
                 })
             }
@@ -58,8 +58,11 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
     }
 
-    private fun populateDataDetail(data: MovieDetailResponse) {
-        detailBinding.tvDetailGenreDuration.text = StringBuilder("${data.genres[0].name} | ${data.releaseDate}")
+    private fun populateDataDetail(data: DetailEntity) {
+        val genre = data.genres.toString().replace("[", "").replace("]", "")
+        val genreDurationText = StringBuilder("$genre | ${data.runtime}")
+
+        detailBinding.tvDetailGenreDuration.text = genreDurationText
         detailBinding.collapsing.title = data.title
         detailBinding.tvDetailOverview.text = data.overview
 
@@ -83,10 +86,10 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         Palette.from(poster).generate { palette ->
             val defValue = resources.getColor(R.color.dark, theme)
             detailBinding.cardDetail.setCardBackgroundColor(
-                palette?.getDarkMutedColor(defValue) ?: defValue
+                    palette?.getDarkMutedColor(defValue) ?: defValue
             )
             detailBinding.collapsing.setContentScrimColor(
-                palette?.getDarkMutedColor(defValue) ?: defValue
+                    palette?.getDarkMutedColor(defValue) ?: defValue
             )
             window.statusBarColor = palette?.getDarkMutedColor(defValue) ?: defValue
         }

@@ -2,12 +2,14 @@ package com.riyaldi.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.riyaldi.moviecatalogue.data.DetailEntity
 import com.riyaldi.moviecatalogue.data.MovieEntity
 import com.riyaldi.moviecatalogue.data.TvShowEntity
 import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShow
+import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShowDetailResponse
 
 class MovieCatalogueRepository private constructor(private val remoteDataSource: RemoteDataSource) : MovieCatalogueDataSource{
     companion object {
@@ -39,13 +41,32 @@ class MovieCatalogueRepository private constructor(private val remoteDataSource:
         return movieResult
     }
 
-    override fun getDetailMovie(movieId: String): LiveData<MovieDetailResponse> {
-        val movieDetailResult = MutableLiveData<MovieDetailResponse>()
+    override fun getDetailMovie(movieId: String): LiveData<DetailEntity> {
+        val movieDetailResult = MutableLiveData<DetailEntity>()
 
         remoteDataSource.getDetailMovie(object : RemoteDataSource.LoadDetailMovieCallback {
             override fun onDetailMovieLoaded(movieDetail: MovieDetailResponse?) {
                 if (movieDetail != null) {
-                    movieDetailResult.postValue(movieDetail)
+                    with(movieDetail) {
+                        val listGenres = ArrayList<String>()
+
+                        for (genre in genres) {
+                            listGenres.add(genre.name)
+                        }
+
+                        val detailMovie = DetailEntity(
+                                backdropPath = backdropPath,
+                                genres = listGenres,
+                                id = id,
+                                overview = overview,
+                                posterPath = posterPath,
+                                releaseDate = releaseDate,
+                                runtime = runtime,
+                                title = title,
+                                voteAverage = voteAverage
+                        )
+                        movieDetailResult.postValue(detailMovie)
+                    }
                 }
             }
         }, movieId)
@@ -70,5 +91,37 @@ class MovieCatalogueRepository private constructor(private val remoteDataSource:
             }
         })
         return tvResult
+    }
+
+    override fun getDetailTvShow(tvShowId: String): LiveData<DetailEntity> {
+        val movieDetailResult = MutableLiveData<DetailEntity>()
+
+        remoteDataSource.getDetailTvShow(object : RemoteDataSource.LoadDetailTvShowCallback {
+            override fun onDetailTvShowLoaded(tvShowDetail: TvShowDetailResponse?) {
+                if (tvShowDetail != null) {
+                    with(tvShowDetail) {
+                        val listGenres = ArrayList<String>()
+
+                        for (genre in genres) {
+                            listGenres.add(genre.name)
+                        }
+
+                        val detailMovie = DetailEntity(
+                            backdropPath = backdropPath,
+                            genres = listGenres,
+                            id = id,
+                            overview = overview,
+                            posterPath = posterPath,
+                            releaseDate = firstAirDate,
+                            runtime = episodeRunTime.average().toInt(),
+                            title = name,
+                            voteAverage = voteAverage
+                        )
+                        movieDetailResult.postValue(detailMovie)
+                    }
+                }
+            }
+        }, tvShowId)
+        return movieDetailResult
     }
 }

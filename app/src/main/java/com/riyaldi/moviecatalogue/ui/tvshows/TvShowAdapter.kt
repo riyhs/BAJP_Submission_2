@@ -15,6 +15,7 @@ import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.data.TvShowEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
 class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
@@ -63,8 +64,8 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_FILM, tvShow.id)
-                    intent.putExtra(DetailActivity.EXTRA_CATEGORY, "tvShow")
+                    intent.putExtra(DetailActivity.EXTRA_FILM, tvShow.id.toString())
+                    intent.putExtra(DetailActivity.EXTRA_CATEGORY, TV_SHOW)
 
                     itemView.context.startActivity(intent)
                 }

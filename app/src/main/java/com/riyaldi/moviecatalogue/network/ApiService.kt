@@ -2,6 +2,7 @@ package com.riyaldi.moviecatalogue.network
 
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MoviesResponse
+import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShowDetailResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShowResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -24,4 +25,10 @@ interface ApiService {
     fun getTvShows(
         @Query("api_key") apiKey: String
     ) : Call<TvShowResponse>
+
+    @GET("tv/{id}")
+    fun getTvShowDetail(
+            @Path("id") id: String,
+            @Query("api_key") apiKey: String
+    ) : Call<TvShowDetailResponse>
 }

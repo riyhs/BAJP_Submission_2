@@ -9,7 +9,7 @@ data class DetailEntity(
     @SerializedName("backdrop_path")
     val backdropPath: String,
     @SerializedName("genres")
-    val genres: List<Genre>,
+    val genres: List<String>,
     @SerializedName("id")
     val id: Int,
     @SerializedName("overview")
