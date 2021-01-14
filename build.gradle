@@ -31,6 +31,7 @@ ext {
     paletteVersion = '1.0.0'
     retrofitVersion = '2.9.0'
     okhttpVersion = '4.9.0'
+    idlingResVersion = '3.3.0'
 }
 
 allprojects {
