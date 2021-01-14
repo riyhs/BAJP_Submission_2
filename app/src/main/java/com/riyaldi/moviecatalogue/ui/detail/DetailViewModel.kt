@@ -2,7 +2,7 @@ package com.riyaldi.moviecatalogue.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.riyaldi.moviecatalogue.data.DetailEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
 
 class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueRepository): ViewModel() {

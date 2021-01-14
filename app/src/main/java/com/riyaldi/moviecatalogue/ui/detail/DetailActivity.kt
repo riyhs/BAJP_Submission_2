@@ -13,7 +13,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.DetailEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory

@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
 import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE

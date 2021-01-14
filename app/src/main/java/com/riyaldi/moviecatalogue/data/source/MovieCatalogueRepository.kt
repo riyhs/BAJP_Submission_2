@@ -2,9 +2,9 @@ package com.riyaldi.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.riyaldi.moviecatalogue.data.DetailEntity
-import com.riyaldi.moviecatalogue.data.MovieEntity
-import com.riyaldi.moviecatalogue.data.TvShowEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse

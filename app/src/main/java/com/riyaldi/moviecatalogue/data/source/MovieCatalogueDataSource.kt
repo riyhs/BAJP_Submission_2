@@ -1,10 +1,9 @@
 package com.riyaldi.moviecatalogue.data.source
 
 import androidx.lifecycle.LiveData
-import com.riyaldi.moviecatalogue.data.DetailEntity
-import com.riyaldi.moviecatalogue.data.MovieEntity
-import com.riyaldi.moviecatalogue.data.TvShowEntity
-import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
+import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 
 interface MovieCatalogueDataSource {
     fun getMovies(): LiveData<List<MovieEntity>>

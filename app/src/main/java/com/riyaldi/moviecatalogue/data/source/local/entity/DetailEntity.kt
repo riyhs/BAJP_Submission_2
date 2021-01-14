@@ -1,4 +1,4 @@
-package com.riyaldi.moviecatalogue.data
+package com.riyaldi.moviecatalogue.data.source.local.entity
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
