@@ -6,6 +6,7 @@ import com.riyaldi.moviecatalogue.data.MovieEntity
 import com.riyaldi.moviecatalogue.data.TvShowEntity
 import com.riyaldi.moviecatalogue.data.source.remote.RemoteDataSource
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
+import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShow
 
 class MovieCatalogueRepository private constructor(private val remoteDataSource: RemoteDataSource) : MovieCatalogueDataSource{
@@ -36,6 +37,19 @@ class MovieCatalogueRepository private constructor(private val remoteDataSource:
             }
         })
         return movieResult
+    }
+
+    override fun getDetailMovie(movieId: String): LiveData<MovieDetailResponse> {
+        val movieDetailResult = MutableLiveData<MovieDetailResponse>()
+
+        remoteDataSource.getDetailMovie(object : RemoteDataSource.LoadDetailMovieCallback {
+            override fun onDetailMovieLoaded(movieDetail: MovieDetailResponse?) {
+                if (movieDetail != null) {
+                    movieDetailResult.postValue(movieDetail)
+                }
+            }
+        }, movieId)
+        return movieDetailResult
     }
 
     override fun getTvShows(): LiveData<List<TvShowEntity>> {

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
 import com.riyaldi.moviecatalogue.di.Injection
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel
 import com.riyaldi.moviecatalogue.ui.movies.MovieViewModel
 import com.riyaldi.moviecatalogue.ui.tvshows.TvShowViewModel
 
@@ -27,6 +28,9 @@ class ViewModelFactory private constructor(private val movieCatalogueRepository:
             }
             modelClass.isAssignableFrom(TvShowViewModel::class.java) -> {
                 return TvShowViewModel(movieCatalogueRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
+                return DetailViewModel(movieCatalogueRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }

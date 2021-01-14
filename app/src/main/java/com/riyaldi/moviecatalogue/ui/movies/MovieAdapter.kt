@@ -15,6 +15,7 @@ import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.data.MovieEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
 import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
@@ -63,8 +64,8 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_FILM, movie.id)
-                    intent.putExtra(DetailActivity.EXTRA_CATEGORY, "movie")
+                    intent.putExtra(DetailActivity.EXTRA_FILM, movie.id.toString())
+                    intent.putExtra(DetailActivity.EXTRA_CATEGORY, MOVIE)
 
                     itemView.context.startActivity(intent)
                 }

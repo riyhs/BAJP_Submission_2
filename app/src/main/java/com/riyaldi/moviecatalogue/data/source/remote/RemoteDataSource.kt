@@ -2,6 +2,7 @@ package com.riyaldi.moviecatalogue.data.source.remote
 
 import android.util.Log
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.Movie
+import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MoviesResponse
 import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShow
 import com.riyaldi.moviecatalogue.data.source.remote.response.tv.TvShowResponse
@@ -26,13 +27,30 @@ class RemoteDataSource {
         val client = ApiConfig.getApiService().getMovies(API_KEY)
         client.enqueue(object : Callback<MoviesResponse> {
             override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
+                    call: Call<MoviesResponse>,
+                    response: Response<MoviesResponse>
             ) {
                 callback.onMoviesLoaded(response.body()?.results)
             }
 
             override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+                Log.e("RemoteDataSource", "getMovies onFailure : ${t.message}")
+            }
+
+        })
+    }
+
+    fun getDetailMovie(callback: LoadDetailMovieCallback, movieId: String) {
+        val client = ApiConfig.getApiService().getMovieDetail(movieId, API_KEY)
+        client.enqueue(object : Callback<MovieDetailResponse> {
+            override fun onResponse(
+                    call: Call<MovieDetailResponse>,
+                    response: Response<MovieDetailResponse>
+            ) {
+                callback.onDetailMovieLoaded(response.body())
+            }
+
+            override fun onFailure(call: Call<MovieDetailResponse>, t: Throwable) {
                 Log.e("RemoteDataSource", "getMovies onFailure : ${t.message}")
             }
 
@@ -58,6 +76,10 @@ class RemoteDataSource {
 
     interface LoadMoviesCallback {
         fun onMoviesLoaded(movies : List<Movie>?)
+    }
+
+    interface LoadDetailMovieCallback {
+        fun onDetailMovieLoaded(movieDetail : MovieDetailResponse?)
     }
 
     interface LoadTvShowsCallback {

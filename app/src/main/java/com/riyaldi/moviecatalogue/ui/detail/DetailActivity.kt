@@ -1,13 +1,20 @@
 package com.riyaldi.moviecatalogue.ui.detail
 
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
+import com.riyaldi.moviecatalogue.data.source.remote.response.movie.MovieDetailResponse
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
+import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
+import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 import kotlin.math.abs
 
 
@@ -33,7 +40,8 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
         detailBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
         detailBinding.appbar.addOnOffsetChangedListener(this)
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(this)
+        val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val extras = intent.extras
         if (extras != null) {
@@ -41,33 +49,38 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
             val dataCategory = extras.getString(EXTRA_CATEGORY)
 
             if (dataId != null && dataCategory != null) {
-//                viewModel.setFilm(dataId, dataCategory)
-                val film = viewModel.getFilmDetail()
-//                populateDataDetail(film)
+                viewModel.setFilm(dataId, dataCategory)
+                viewModel.getMovieDetail().observe(this, {detail ->
+                    populateDataDetail(detail)
+                })
             }
         }
 
     }
 
-//    @SuppressLint("SetTextI18n")
-//    private fun populateDataDetail(data: MovieEntity) {
-//        detailBinding.tvDetailGenreDuration.text = "${data.genre} | ${data.duration}"
-//        detailBinding.collapsing.title = data.title
-//        detailBinding.tvDetailOverview.text = data.overview
-//
-//        Glide.with(this)
-//            .load(data.poster)
-//            .into(detailBinding.ivDetail)
-//
-//        detailBinding.ivDetail.tag = data.poster
-//
-//        setColorByPalette(data.poster)
-//    }
+    private fun populateDataDetail(data: MovieDetailResponse) {
+        detailBinding.tvDetailGenreDuration.text = StringBuilder("${data.genres[0].name} | ${data.releaseDate}")
+        detailBinding.collapsing.title = data.title
+        detailBinding.tvDetailOverview.text = data.overview
 
-    private fun setColorByPalette(poster: Int) {
-        val bitmap = BitmapFactory.decodeResource(resources, poster)
+        Glide.with(this)
+                .asBitmap()
+                .load(IMAGE_URL + data.posterPath)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        detailBinding.ivDetail.setImageBitmap(resource)
+                        setColorByPalette(resource)
+                        detailBinding.ivDetail.tag = resource
+                    }
 
-        Palette.from(bitmap).generate { palette ->
+                    override fun onLoadCleared(placeholder: Drawable?) {
+
+                    }
+                })
+    }
+
+    private fun setColorByPalette(poster: Bitmap) {
+        Palette.from(poster).generate { palette ->
             val defValue = resources.getColor(R.color.dark, theme)
             detailBinding.cardDetail.setCardBackgroundColor(
                 palette?.getDarkMutedColor(defValue) ?: defValue
