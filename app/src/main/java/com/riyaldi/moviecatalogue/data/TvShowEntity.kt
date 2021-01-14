@@ -1,8 +1,10 @@
 package com.riyaldi.moviecatalogue.data
 
-
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class TvShowEntity(
     @SerializedName("id")
     val id: Int,
@@ -12,4 +14,4 @@ data class TvShowEntity(
     val posterPath: String,
     @SerializedName("vote_average")
     val voteAverage: Double
-)
+) : Parcelable
