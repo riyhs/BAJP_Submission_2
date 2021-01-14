@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentTvShowBinding
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
+import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
 class TvShowFragment : Fragment() {
 
@@ -23,11 +24,16 @@ class TvShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[TvShowViewModel::class.java]
-            val tvShows = viewModel.getTvShows()
 
+            val factory = ViewModelFactory.getInstance(requireActivity())
+            val viewModel = ViewModelProvider(this, factory)[TvShowViewModel::class.java]
             val tvShowAdapter = TvShowAdapter()
-            tvShowAdapter.setTvShows(tvShows)
+
+            viewModel.getTvShows().observe(viewLifecycleOwner, {tvShows ->
+                // progressbar
+                tvShowAdapter.setTvShows(tvShows)
+                tvShowAdapter.notifyDataSetChanged()
+            })
 
             val marginVertical = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics)
 

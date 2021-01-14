@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentMovieBinding
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
+import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
 class MovieFragment : Fragment() {
 
@@ -23,11 +24,16 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieViewModel::class.java]
-            val movies = viewModel.getMovies()
 
+            val factory = ViewModelFactory.getInstance(requireActivity())
+            val viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
             val movieAdapter = MovieAdapter()
-            movieAdapter.setMovies(movies)
+
+            viewModel.getMovies().observe(viewLifecycleOwner, { movies ->
+                // progressbar
+                movieAdapter.setMovies(movies)
+                movieAdapter.notifyDataSetChanged()
+            })
 
             val marginVertical = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics)
 

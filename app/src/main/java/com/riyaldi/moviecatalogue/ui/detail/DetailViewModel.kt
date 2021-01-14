@@ -2,26 +2,25 @@ package com.riyaldi.moviecatalogue.ui.detail
 
 import androidx.lifecycle.ViewModel
 import com.riyaldi.moviecatalogue.data.MovieEntity
-import com.riyaldi.moviecatalogue.utils.DataDummy
 
 class DetailViewModel: ViewModel() {
     private lateinit var film: MovieEntity
 
-    fun setFilm(id: String, category: String) {
-        when (category) {
-            "tvShow" -> {
-                for (tvShow in DataDummy.getTvShows()) {
-                    if (tvShow.id == id) film = tvShow
-                }
-            }
-
-            "movie" -> {
-                for (movie in DataDummy.getMovies()) {
-                    if (movie.id == id) film = movie
-                }
-            }
-        }
-    }
+//    fun setFilm(id: String, category: String) {
+//        when (category) {
+//            "tvShow" -> {
+//                for (tvShow in DataDummy.getTvShows()) {
+//                    if (tvShow.id == id) film = tvShow
+//                }
+//            }
+//
+//            "movie" -> {
+//                for (movie in DataDummy.getMovies()) {
+//                    if (movie.id == id) film = movie
+//                }
+//            }
+//        }
+//    }
 
     fun getFilmDetail() = film
 

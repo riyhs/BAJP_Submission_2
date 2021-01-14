@@ -1,15 +1,12 @@
 package com.riyaldi.moviecatalogue.ui.detail
 
-import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
-import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.MovieEntity
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
 import kotlin.math.abs
 
@@ -44,28 +41,28 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
             val dataCategory = extras.getString(EXTRA_CATEGORY)
 
             if (dataId != null && dataCategory != null) {
-                viewModel.setFilm(dataId, dataCategory)
+//                viewModel.setFilm(dataId, dataCategory)
                 val film = viewModel.getFilmDetail()
-                populateDataDetail(film)
+//                populateDataDetail(film)
             }
         }
 
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun populateDataDetail(data: MovieEntity) {
-        detailBinding.tvDetailGenreDuration.text = "${data.genre} | ${data.duration}"
-        detailBinding.collapsing.title = data.title
-        detailBinding.tvDetailOverview.text = data.overview
-
-        Glide.with(this)
-            .load(data.poster)
-            .into(detailBinding.ivDetail)
-
-        detailBinding.ivDetail.tag = data.poster
-
-        setColorByPalette(data.poster)
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun populateDataDetail(data: MovieEntity) {
+//        detailBinding.tvDetailGenreDuration.text = "${data.genre} | ${data.duration}"
+//        detailBinding.collapsing.title = data.title
+//        detailBinding.tvDetailOverview.text = data.overview
+//
+//        Glide.with(this)
+//            .load(data.poster)
+//            .into(detailBinding.ivDetail)
+//
+//        detailBinding.ivDetail.tag = data.poster
+//
+//        setColorByPalette(data.poster)
+//    }
 
     private fun setColorByPalette(poster: Int) {
         val bitmap = BitmapFactory.decodeResource(resources, poster)

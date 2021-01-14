@@ -1,8 +1,8 @@
 package com.riyaldi.moviecatalogue.ui.tvshows
 
 import androidx.lifecycle.ViewModel
-import com.riyaldi.moviecatalogue.utils.DataDummy
+import com.riyaldi.moviecatalogue.data.source.MovieCatalogueRepository
 
-class TvShowViewModel: ViewModel() {
-    fun getTvShows() = DataDummy.getTvShows()
+class TvShowViewModel(private val movieCatalogueRepository: MovieCatalogueRepository): ViewModel() {
+    fun getTvShows() = movieCatalogueRepository.getTvShows()
 }
