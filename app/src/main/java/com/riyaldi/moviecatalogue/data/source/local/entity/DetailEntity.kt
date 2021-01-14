@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class DetailEntity(
+data class   DetailEntity(
     @SerializedName("backdrop_path")
     val backdropPath: String,
     @SerializedName("genres")

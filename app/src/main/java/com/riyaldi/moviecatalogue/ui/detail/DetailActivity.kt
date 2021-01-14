@@ -54,7 +54,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory)
-                viewModel.getMovieDetail().observe(this, { detail ->
+                viewModel.getDataDetail().observe(this, { detail ->
                     showProgressBar(false)
                     populateDataDetail(detail)
                 })

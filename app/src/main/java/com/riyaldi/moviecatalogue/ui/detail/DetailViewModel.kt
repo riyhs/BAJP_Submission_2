@@ -25,6 +25,6 @@ class DetailViewModel(private val movieCatalogueRepository: MovieCatalogueReposi
         }
     }
 
-    fun getMovieDetail() = detailData
+    fun getDataDetail() = detailData
 
 }
