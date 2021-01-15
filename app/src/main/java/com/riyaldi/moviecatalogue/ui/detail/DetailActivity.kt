@@ -55,7 +55,6 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory)
                 viewModel.getDataDetail().observe(this, { detail ->
-                    showProgressBar(false)
                     populateDataDetail(detail)
                 })
             }
@@ -84,13 +83,21 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         detailBinding.ivDetail.setImageBitmap(resource)
                         setColorByPalette(resource)
-                        detailBinding.ivDetail.tag = data.posterPath
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
 
                     }
                 })
+
+        Glide.with(this)
+                .load(IMAGE_URL + data.backdropPath)
+                .into(detailBinding.ivBackdrop)
+
+        detailBinding.ivDetail.tag = data.posterPath
+        detailBinding.ivBackdrop.tag = data.backdropPath
+
+        showProgressBar(false)
     }
 
     private fun setColorByPalette(poster: Bitmap) {
