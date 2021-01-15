@@ -43,7 +43,6 @@ class DetailViewModelTest {
     @Before
     fun setUpMovie() {
         viewModel = DetailViewModel(movieCatalogueRepository)
-//        viewModel.setFilm(dummyMovieId, MOVIE)
     }
 
     @Test
@@ -75,7 +74,6 @@ class DetailViewModelTest {
     @Before
     fun setupTvShow() {
         viewModel = DetailViewModel(movieCatalogueRepository)
-//        viewModel.setFilm(dummyTvShowId, TV_SHOW)
     }
 
     @Test
