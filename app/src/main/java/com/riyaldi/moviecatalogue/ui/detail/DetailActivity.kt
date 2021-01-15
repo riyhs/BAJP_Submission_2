@@ -70,7 +70,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
     private fun populateDataDetail(data: DetailEntity) {
         val genre = data.genres.toString().replace("[", "").replace("]", "")
-        val genreDurationText = StringBuilder("$genre | ${data.runtime}")
+        val genreDurationText = StringBuilder("$genre | ${data.runtime} Minutes")
 
         detailBinding.tvDetailGenreDuration.text = genreDurationText
         detailBinding.collapsing.title = data.title
