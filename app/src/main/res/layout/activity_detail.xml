@@ -87,6 +87,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:id="@+id/iv_backdrop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="24dp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_detail_overview"
+                        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
                     <TextView
                         android:id="@+id/tv_detail_genre_duration"
                         android:layout_width="match_parent"

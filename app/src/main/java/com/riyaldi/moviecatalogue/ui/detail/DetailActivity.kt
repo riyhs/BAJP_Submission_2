@@ -84,7 +84,7 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         detailBinding.ivDetail.setImageBitmap(resource)
                         setColorByPalette(resource)
-                        detailBinding.ivDetail.tag = resource
+                        detailBinding.ivDetail.tag = data.posterPath
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
