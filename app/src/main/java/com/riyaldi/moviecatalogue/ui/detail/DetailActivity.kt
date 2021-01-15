@@ -1,16 +1,22 @@
 package com.riyaldi.moviecatalogue.ui.detail
 
-import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
 import com.riyaldi.moviecatalogue.R
-import com.riyaldi.moviecatalogue.data.MovieEntity
+import com.riyaldi.moviecatalogue.data.source.local.entity.DetailEntity
 import com.riyaldi.moviecatalogue.databinding.ActivityDetailBinding
+import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
+import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 import kotlin.math.abs
 
 
@@ -33,10 +39,13 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
         supportActionBar?.hide()
 
+        showProgressBar(true)
+
         detailBinding.toolbar.setNavigationOnClickListener { onBackPressed() }
         detailBinding.appbar.addOnOffsetChangedListener(this)
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[DetailViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(this)
+        val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val extras = intent.extras
         if (extras != null) {
@@ -45,38 +54,60 @@ class DetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener
 
             if (dataId != null && dataCategory != null) {
                 viewModel.setFilm(dataId, dataCategory)
-                val film = viewModel.getFilmDetail()
-                populateDataDetail(film)
+                viewModel.getDataDetail().observe(this, { detail ->
+                    populateDataDetail(detail)
+                })
             }
         }
 
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun populateDataDetail(data: MovieEntity) {
-        detailBinding.tvDetailGenreDuration.text = "${data.genre} | ${data.duration}"
+    private fun showProgressBar(state: Boolean) {
+        detailBinding.progressBar.isVisible = state
+        detailBinding.appbar.isInvisible = state
+        detailBinding.nestedScrollView.isInvisible = state
+    }
+
+    private fun populateDataDetail(data: DetailEntity) {
+        val genre = data.genres.toString().replace("[", "").replace("]", "")
+        val genreDurationText = StringBuilder("$genre | ${data.runtime} Minutes")
+
+        detailBinding.tvDetailGenreDuration.text = genreDurationText
         detailBinding.collapsing.title = data.title
         detailBinding.tvDetailOverview.text = data.overview
 
         Glide.with(this)
-            .load(data.poster)
-            .into(detailBinding.ivDetail)
+                .asBitmap()
+                .load(IMAGE_URL + data.posterPath)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        detailBinding.ivDetail.setImageBitmap(resource)
+                        setColorByPalette(resource)
+                    }
 
-        detailBinding.ivDetail.tag = data.poster
+                    override fun onLoadCleared(placeholder: Drawable?) {
 
-        setColorByPalette(data.poster)
+                    }
+                })
+
+        Glide.with(this)
+                .load(IMAGE_URL + data.backdropPath)
+                .into(detailBinding.ivBackdrop)
+
+        detailBinding.ivDetail.tag = data.posterPath
+        detailBinding.ivBackdrop.tag = data.backdropPath
+
+        showProgressBar(false)
     }
 
-    private fun setColorByPalette(poster: Int) {
-        val bitmap = BitmapFactory.decodeResource(resources, poster)
-
-        Palette.from(bitmap).generate { palette ->
+    private fun setColorByPalette(poster: Bitmap) {
+        Palette.from(poster).generate { palette ->
             val defValue = resources.getColor(R.color.dark, theme)
             detailBinding.cardDetail.setCardBackgroundColor(
-                palette?.getDarkMutedColor(defValue) ?: defValue
+                    palette?.getDarkMutedColor(defValue) ?: defValue
             )
             detailBinding.collapsing.setContentScrimColor(
-                palette?.getDarkMutedColor(defValue) ?: defValue
+                    palette?.getDarkMutedColor(defValue) ?: defValue
             )
             window.statusBarColor = palette?.getDarkMutedColor(defValue) ?: defValue
         }

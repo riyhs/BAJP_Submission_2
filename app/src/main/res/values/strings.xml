@@ -6,4 +6,5 @@
     <string name="poster">Poster</string>
     <string name="genre">Genre</string>
     <string name="film_title">Film Title</string>
+    <string name="image_backdrop">Image Backdrop</string>
 </resources>
