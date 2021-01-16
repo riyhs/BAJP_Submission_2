@@ -1,6 +1,5 @@
 package com.riyaldi.moviecatalogue.ui.tvshows
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -14,12 +13,15 @@ import com.bumptech.glide.request.transition.Transition
 import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.data.source.local.entity.TvShowEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
-import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
-import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
 class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
+    private lateinit var onItemClickCallback: OnItemClickCallback
     private var tvShows = ArrayList<TvShowEntity>()
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     fun setTvShows(tvShows: List<TvShowEntity>) {
         if (tvShows.isNullOrEmpty()) return
@@ -38,7 +40,7 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
 
     override fun getItemCount(): Int = tvShows.size
 
-    class TvShowViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TvShowViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tvShow: TvShowEntity) {
             with(binding) {
                 tvTitle.text = tvShow.name
@@ -63,13 +65,15 @@ class TvShowAdapter: RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
                         })
 
                 itemView.setOnClickListener {
-                    val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_FILM, tvShow.id.toString())
-                    intent.putExtra(DetailActivity.EXTRA_CATEGORY, TV_SHOW)
 
-                    itemView.context.startActivity(intent)
                 }
+
+                itemView.setOnClickListener{onItemClickCallback.onItemClicked(tvShow.id.toString())}
             }
         }
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(id: String)
     }
 }

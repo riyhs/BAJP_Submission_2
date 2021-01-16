@@ -1,6 +1,5 @@
 package com.riyaldi.moviecatalogue.ui.movies
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -14,12 +13,15 @@ import com.bumptech.glide.request.transition.Transition
 import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.data.source.local.entity.MovieEntity
 import com.riyaldi.moviecatalogue.databinding.ItemMovieBinding
-import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
-import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.utils.NetworkInfo.IMAGE_URL
 
 class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+    private lateinit var onItemClickCallback: OnItemClickCallback
     private var movies = ArrayList<MovieEntity>()
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
 
     fun setMovies(movies: List<MovieEntity>){
         if (movies.isNullOrEmpty()) return
@@ -38,7 +40,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun getItemCount(): Int = movies.size
 
-    class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieEntity) {
             with(binding) {
                 tvTitle.text = movie.title
@@ -62,14 +64,12 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                             }
                         })
 
-                itemView.setOnClickListener {
-                    val intent = Intent(itemView.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_FILM, movie.id.toString())
-                    intent.putExtra(DetailActivity.EXTRA_CATEGORY, MOVIE)
-
-                    itemView.context.startActivity(intent)
-                }
+                itemView.setOnClickListener {onItemClickCallback.onItemClicked(movie.id.toString())}
             }
         }
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(id: String)
     }
 }

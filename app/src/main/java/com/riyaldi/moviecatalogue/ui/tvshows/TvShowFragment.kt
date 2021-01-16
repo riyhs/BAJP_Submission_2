@@ -1,5 +1,6 @@
 package com.riyaldi.moviecatalogue.ui.tvshows
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -11,10 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentTvShowBinding
+import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.TV_SHOW
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
-class TvShowFragment : Fragment() {
+class TvShowFragment : Fragment(), TvShowAdapter.OnItemClickCallback {
 
     private lateinit var fragmentTvShowBinding: FragmentTvShowBinding
 
@@ -35,6 +38,7 @@ class TvShowFragment : Fragment() {
             viewModel.getTvShows().observe(viewLifecycleOwner, {tvShows ->
                 showProgressBar(false)
                 tvShowAdapter.setTvShows(tvShows)
+                tvShowAdapter.setOnItemClickCallback(this)
                 tvShowAdapter.notifyDataSetChanged()
             })
 
@@ -47,6 +51,14 @@ class TvShowFragment : Fragment() {
                 this.adapter = tvShowAdapter
             }
         }
+    }
+
+    override fun onItemClicked(id: String) {
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_FILM, id)
+        intent.putExtra(DetailActivity.EXTRA_CATEGORY, TV_SHOW)
+
+        context?.startActivity(intent)
     }
 
     private fun showProgressBar(state: Boolean) {

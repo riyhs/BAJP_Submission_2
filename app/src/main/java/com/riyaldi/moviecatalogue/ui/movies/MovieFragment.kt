@@ -1,5 +1,6 @@
 package com.riyaldi.moviecatalogue.ui.movies
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -11,10 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.riyaldi.moviecatalogue.databinding.FragmentMovieBinding
+import com.riyaldi.moviecatalogue.ui.detail.DetailActivity
+import com.riyaldi.moviecatalogue.ui.detail.DetailViewModel.Companion.MOVIE
 import com.riyaldi.moviecatalogue.utils.MarginItemDecoration
 import com.riyaldi.moviecatalogue.viewmodel.ViewModelFactory
 
-class MovieFragment : Fragment() {
+class MovieFragment : Fragment(), MovieAdapter.OnItemClickCallback {
 
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
 
@@ -36,6 +39,7 @@ class MovieFragment : Fragment() {
             viewModel.getMovies().observe(viewLifecycleOwner, { movies ->
                 showProgressBar(false)
                 movieAdapter.setMovies(movies)
+                movieAdapter.setOnItemClickCallback(this)
                 movieAdapter.notifyDataSetChanged()
             })
 
@@ -48,6 +52,14 @@ class MovieFragment : Fragment() {
                 this.adapter = movieAdapter
             }
         }
+    }
+
+    override fun onItemClicked(id: String) {
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_FILM, id)
+        intent.putExtra(DetailActivity.EXTRA_CATEGORY, MOVIE)
+
+        context?.startActivity(intent)
     }
 
     private fun showProgressBar(state: Boolean) {

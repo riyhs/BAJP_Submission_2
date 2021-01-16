@@ -9,6 +9,11 @@ import com.riyaldi.moviecatalogue.R
 import com.riyaldi.moviecatalogue.ui.home.HomeActivity
 
 class SplashActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TWO_SECOND_IN_MILLIS = 2000L
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -16,6 +21,6 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
-        }, 2000)
+        }, TWO_SECOND_IN_MILLIS)
     }
 }
